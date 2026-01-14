@@ -1,0 +1,57 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    double r;
+    cout << "Введите радиус окружности: ";
+    cin >> r;
+
+    double S = 2 * M_PI * r;
+
+    cout << "Длина окружности: " << fixed << setprecision(3) << S << endl;
+
+   const string filename = "a.txt";
+
+    while (true) {
+        string input;
+        cout << "Введите строку (read/erase/exit для действий): ";
+        getline(cin, input);
+
+        if (input == "read") {
+            ifstream fin(filename);
+            if (!fin) {
+                cout << "Файл пуст или не существует." << endl;
+            } else {
+                string line;
+                cout << "Содержимое файла:" << endl;
+                while (getline(fin, line)) {
+                    cout << line << endl;
+                }
+            }
+            continue;
+        }
+
+        if (input == "erase") {
+            ofstream fout(filename, ios::trunc);
+            fout.close();
+            cout << "Файл очищен." << endl;
+            continue;
+        }
+
+        if (input == "exit") {
+            break;
+        }
+
+        ofstream fout(filename, ios::app);
+        fout << input << endl;
+        fout.close();
+    }
+
+    cout << "Программа завершена." << endl;
+}
