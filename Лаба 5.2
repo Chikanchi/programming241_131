@@ -1,0 +1,127 @@
+#include <iostream>  // Подключаем библиотеку для ввода‑вывода (cout, cin)
+#include <string>   // Подключаем библиотеку для работы со строками (string)
+using namespace std; // Используем пространство имён std, чтобы не писать std:: перед cout, string и т. д.
+
+// Перечисление типов оружия — задаём возможные варианты
+enum WeaponType {
+    ONEHANDED,    // одноручное оружие
+    TWOHANDED,    // двуручное оружие
+    BOW,          // лук
+    CROSSBOW      // арбалет
+};
+
+// Базовый класс Weapon (Оружие)
+class Weapon {
+private:  // Закрытые поля — доступны только внутри класса
+    string name;        // название оружия
+    int damage;         // базовый урон
+    int durability;      // прочность оружия
+    WeaponType type;    // тип оружия (из перечисления WeaponType)
+
+public:  // Открытые методы — доступны извне класса
+    // Конструктор: инициализирует объект при создании
+    Weapon(string n, int d, int dur, WeaponType t)
+        : name(n), damage(d), durability(dur), type(t) {}
+        // Список инициализации: присваиваем параметрам значения полей
+
+    // GET‑методы — возвращают значения закрытых полей
+    string getName() const { return name; }           // имя оружия
+    int getDurability() const { return durability; }   // прочность
+    WeaponType getType() const { return type; }       // тип оружия
+
+    // 1. Виртуальный метод getDamage() — можно переопределить в дочерних классах
+    virtual int getDamage() const {
+        return damage;  // возвращает базовый урон
+    }
+
+    // SET‑метод — позволяет изменить урон (с проверкой на неотрицательность)
+    void setDamage(int newDamage) {
+        if (newDamage >= 0) damage = newDamage;  // если значение ≥ 0, присваиваем
+    }
+};
+
+// Дочерний класс MagicWeapon (Магическое оружие) — наследуется от Weapon
+class MagicWeapon : public Weapon {
+private:  // Закрытое поле — только для этого класса
+    int magicDamage;  // дополнительный магический урон
+
+public:
+    // Конструктор без параметров — задаёт значения по умолчанию
+    MagicWeapon() : Weapon("Магический клинок", 10, 50, ONEHANDED), magicDamage(20) {}
+        // Сначала вызываем конструктор базового класса (Weapon), затем инициализируем magicDamage
+
+    // Конструктор с параметрами — позволяет задать все значения вручную
+    MagicWeapon(string n, int baseDmg, int dur, WeaponType t, int mDmg)
+        : Weapon(n, baseDmg, dur, t), magicDamage(mDmg) {}
+        // Передаём параметры в конструктор Weapon, затем присваиваем magicDamage
+
+    // 2. Переопределяем виртуальный метод getDamage() из базового класса
+    int getDamage() const override {
+        return Weapon::getDamage() + magicDamage;  // сумма базового и магического урона
+        // Weapon::getDamage() — вызываем метод родительского класса
+    }
+
+    // GET‑метод для магического урона — возвращает значение private‑поля
+    int getMagicDamage() const {
+        return magicDamage;
+    }
+};
+
+// 4. Переопределение операторов сравнения
+// Оператор «больше» (>) — сравнивает два оружия по урону
+bool operator>(const Weapon& w1, const Weapon& w2) {
+    return w1.getDamage() > w2.getDamage();  // используем виртуальный метод getDamage()
+}
+
+// Оператор «меньше» (<) — сравнивает два оружия по урону
+bool operator<(const Weapon& w1, const Weapon& w2) {
+    return w1.getDamage() < w2.getDamage();  // аналогично, через getDamage()
+}
+
+int main() {  // Главная функция программы
+    // 3. Проверяем, что магическое оружие возвращает сумму уронов
+    Weapon sword("Меч", 25, 100, ONEHANDED);  // создаём обычный меч
+    MagicWeapon magicSword("Огненный меч", 20, 80, ONEHANDED, 15);  // создаём магический меч
+
+    // Выводим информацию об обычном мече
+    cout << "Урон обычного меча: " << sword.getDamage() << endl;
+
+    // Выводим базовый урон магического меча (без учёта магии)
+    cout << "Базовый урон магического меча: " << magicSword.Weapon::getDamage() << endl;
+
+    // Выводим дополнительный магический урон
+    cout << "Магический урон: " << magicSword.getMagicDamage() << endl;
+
+    // Выводим суммарный урон (база + магия) — результат переопределённого getDamage()
+    cout << "Суммарный урон магического меча: " << magicSword.getDamage() << endl;
+
+    // 5. Проверяем операторы сравнения
+    cout << "\nСравнение оружия:\n";
+
+    // Сравниваем обычный и магический меч с помощью оператора >
+    if (sword > magicSword) {
+        cout << sword.getName() << " мощнее, чем " << magicSword.getName() << endl;
+    } else {
+        cout << magicSword.getName() << " мощнее, чем " << sword.getName() << endl;
+    }
+
+    // Сравниваем с помощью оператора <
+    if (sword < magicSword) {
+        cout << sword.getName() << " слабее, чем " << magicSword.getName() << endl;
+    } else {
+        cout << magicSword.getName() << " слабее, чем " << sword.getName() << endl;
+    }
+
+    // Создаём ещё одно магическое оружие для дополнительного теста
+    MagicWeapon strongMagicSword("Молния", 15, 90, ONEHANDED, 25);
+    cout << "\nУрон 'Молнии': " << strongMagicSword.getDamage() << endl;
+
+    // Сравниваем два магических оружия
+    if (magicSword < strongMagicSword) {
+        cout << magicSword.getName() << " слабее, чем " << strongMagicSword.getName() << endl;
+    } else {
+        cout << strongMagicSword.getName() << " слабее, чем " << magicSword.getName() << endl;
+    }
+
+    return 0;  // Завершаем программу с кодом 0 (успех)
+}
