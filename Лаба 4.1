@@ -27,10 +27,7 @@ public:
 int main() {
     // 4. Создаём два объекта класса Weapon
     Weapon sword("Клинок Тьмы", 25, 1.8);  // с параметрами
-    Weapon axe();                             // без параметров (по умолчанию)
-
-    // Чтобы корректно создать объект без параметров, нужно:
-    Weapon axe2;  // исправленный вариант
+    Weapon axe;                             // без параметров (по умолчанию)
 
     // 5. Выводим значения всех переменных обоих объектов
     cout << "Оружие 1:" << endl;
@@ -39,9 +36,9 @@ int main() {
     cout << "Вес: " << sword.weight << " кг" << endl;
 
     cout << "\nОружие 2:" << endl;
-    cout << "Название: " << axe2.name << endl;
-    cout << "Урон: " << axe2.damage << endl;
-    cout << "Вес: " << axe2.weight << " кг" << endl;
+    cout << "Название: " << axe.name << endl;
+    cout << "Урон: " << axe.damage << endl;
+    cout << "Вес: " << axe.weight << " кг" << endl;
 
     return 0;
 }
