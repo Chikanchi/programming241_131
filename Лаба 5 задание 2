@@ -1,0 +1,132 @@
+#include <iostream>  // Подключаем библиотеку для операций ввода-вывода (cout, cin)
+#include <string>   // Подключаем библиотеку для работы со строками (тип string)
+using namespace std; // Указываем, что используем пространство имён std (чтобы не писать std:: перед cout, string и т. д.)
+
+// 1. Перечисление типов оружия — задаём возможные варианты
+enum WeaponType {
+    ONEHANDED,   // одноручное оружие
+    TWOHANDED,   // двуручное оружие
+    BOW,         // лук
+    CROSSBOW     // арбалет
+};
+
+// 1. Абстрактный класс Weapon (Оружие)
+class Weapon {
+private:  // Закрытые поля — доступны только внутри класса
+    string name;        // название оружия
+    int damage;         // урон
+    int durability;      // прочность
+    WeaponType type;    // тип оружия (из перечисления WeaponType)
+
+public:  // Открытые методы — доступны извне класса
+    // Конструктор класса Weapon с 4 параметрами
+    Weapon(string n, int d, int dur, WeaponType t)
+        : name(n),            // инициализируем поле name значением параметра n
+          damage(d),       // инициализируем поле damage значением параметра d
+          durability(dur), // инициализируем поле durability значением параметра dur
+          type(t) {       // инициализируем поле type значением параметра t
+        // Тело конструктора пустое — все поля инициализированы в списке инициализации
+    }
+
+    // GET-метод для получения названия оружия
+    string getName() const {
+        return name;  // возвращаем значение поля name
+    }
+
+    // GET-метод для получения урона
+    int getDamage() const {
+        return damage;  // возвращаем значение поля damage
+    }
+
+    // GET-метод для получения прочности
+    int getDurability() const {
+        return durability;  // возвращаем значение поля durability
+    }
+
+    // GET-метод для получения типа оружия
+    WeaponType getType() const {
+        return type;  // возвращаем значение поля type
+    }
+
+    // SET-метод для изменения урона
+    void setDamage(int newDamage) {
+        if (newDamage >= 0) {  // проверяем, что новое значение неотрицательное
+            damage = newDamage; // присваиваем новое значение полю damage
+        }
+    }
+
+    // 1. Чисто виртуальная функция Attack — делает класс абстрактным
+    virtual void Attack() const = 0;  // =0 означает, что метод чисто виртуальный; класс становится абстрактным
+};
+
+// Класс MagicWeapon (Магическое оружие) — наследник Weapon
+class MagicWeapon : public Weapon {
+private:  // Закрытое поле — доступно только внутри класса
+    int magicDamage;  // дополнительный магический урон
+
+public:
+    // Конструктор без параметров
+    MagicWeapon()
+        : Weapon("Магический клинок", 10, 50, ONEHANDED), // вызываем конструктор родителя
+          magicDamage(20) {                              // инициализируем magicDamage значением 20
+        // Тело конструктора пустое
+    }
+
+    // Конструктор с параметрами
+    MagicWeapon(string n, int baseDmg, int dur, WeaponType t, int mDmg)
+        : Weapon(n, baseDmg, dur, t),  // вызываем конструктор родителя с параметрами
+          magicDamage(mDmg) {           // инициализируем magicDamage значением mDmg
+        // Тело конструктора пустое
+    }
+
+    // GET-метод для получения магического урона
+    int getMagicDamage() const {
+        return magicDamage;  // возвращаем значение поля magicDamage
+    }
+
+    // Переопределяем метод getDamage(), чтобы учитывать магический урон
+    int getDamage() const override {
+        return Weapon::getDamage() + magicDamage;  // сумма базового и магического урона
+    }
+
+    // 2. Реализуем чисто виртуальную функцию Attack из родительского класса
+    void Attack() const override {
+        cout << "Атакуем магическим оружием" << endl;  // выводим сообщение при атаке
+    }
+};
+
+// 5. Класс одноразового оружия (DisposableWeapon) — наследник Weapon
+class DisposableWeapon : public Weapon {
+private:  // Закрытая секция — поле доступно только внутри класса
+    bool isUsed;  // 6. Флаг: было ли оружие использовано (true/false)
+
+public:
+    // Конструктор
+    DisposableWeapon(string n, int d, int dur, WeaponType t)
+        : Weapon(n, d, dur, t),  // вызываем конструктор родителя
+          isUsed(false) {          // изначально оружие не использовано (false)
+        // Тело конструктора пустое
+    }
+
+    // 7. Реализуем метод Attack (чисто виртуальный из родителя)
+    void Attack() const override {
+        if (isUsed) {
+            cout << "Оружие уже было использовано" << endl;  // если уже использовано — сообщаем
+        } else {
+            cout << "Атакуем одноразовым оружием" << endl; // если ещё не использовано — атакуем
+            // НО: нельзя изменить isUsed в const-методе!
+        }
+    }
+
+    // Метод use() — для реальной атаки (может менять состояние)
+    void use() {
+        if (isUsed) {
+            cout << "Оружие уже было использовано" << endl;  // повторно атаковать нельзя
+        } else {
+            cout << "Атакуем одноразовым оружием" << endl;   // выполняем атаку
+            isUsed = true;  // отмечаем оружие как использованное
+        }
+    }
+};
+
+// 9.
