@@ -9,7 +9,9 @@ int main() {
     cout << "Введите имя: (на латинице)";
     cin >> name;
 
+    // создаем шаблон регулярного выражения
     regex nameRegex("^[A-Z][a-zA-Z]{1,31}$");
+    // проверка строки на соответствие регулярному выражению
     if (regex_match(name, nameRegex)) {
         cout << "Имя корректно" << endl;
     } else {
@@ -19,6 +21,7 @@ int main() {
     string text = "Напишите на test@example.com, support@domain.ru или info123@mail.com для связи.";
 
     regex emailRegex("[\\w\\.]+@[\\w\\.]+\\.[a-zA-Z]{2,}");
+    // хранение совпадений по выражению
     smatch matches;
     string temp = text;
 
