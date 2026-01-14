@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 1. Создаём класс "Оружие"
+class Weapon {
+public:
+    // Поля класса (характеристики оружия)
+    string name;      // название оружия
+    int damage;       // наносимый урон
+    double weight;    // вес оружия (в кг)
+
+    // 2. Конструктор с тремя параметрами
+    Weapon(string n, int d, double w) {
+        name = n;
+        damage = d;
+        weight = w;
+    }
+
+    // 3. Конструктор без параметров (использует значения по умолчанию)
+    Weapon() : Weapon("Меч", 10, 2.5) {
+        // Здесь мы вызываем конструктор с параметрами,
+        // передавая значения по умолчанию
+    }
+};
+
+int main() {
+    // 4. Создаём два объекта класса Weapon
+    Weapon sword("Клинок Тьмы", 25, 1.8);  // с параметрами
+    Weapon axe();                             // без параметров (по умолчанию)
+
+    // Чтобы корректно создать объект без параметров, нужно:
+    Weapon axe2;  // исправленный вариант
+
+    // 5. Выводим значения всех переменных обоих объектов
+    cout << "Оружие 1:" << endl;
+    cout << "Название: " << sword.name << endl;
+    cout << "Урон: " << sword.damage << endl;
+    cout << "Вес: " << sword.weight << " кг" << endl;
+
+    cout << "\nОружие 2:" << endl;
+    cout << "Название: " << axe2.name << endl;
+    cout << "Урон: " << axe2.damage << endl;
+    cout << "Вес: " << axe2.weight << " кг" << endl;
+
+    return 0;
+}
