@@ -1,0 +1,125 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 1. Создаём перечисление (enum) для типов оружия
+enum WeaponType {
+    ONEHANDED,  // одноручное
+    TWOHANDED,  // двуручное
+    BOW,        // лук
+    CROSSBOW    // арбалет
+};
+
+// Базовый класс Weapon (Оружие)
+class Weapon {
+private:
+    string name;           // название оружия
+    int damage;            // базовый урон
+    int durability;         // прочность
+    WeaponType type;       // тип оружия (из перечисления)
+
+public:
+    // Конструктор с параметрами
+    Weapon(string n, int d, int dur, WeaponType t) {
+        name = n;
+        damage = d;
+        durability = dur;
+        type = t;
+    }
+
+    // GET-методы для всех полей
+    string getName() const { return name; }
+    int getDamage() const { return damage; }
+    int getDurability() const { return durability; }
+    WeaponType getType() const { return type; }  // GET для типа оружия
+
+    // SET-метод для урона
+    void setDamage(int newDamage) {
+        if (newDamage >= 0) damage = newDamage;
+    }
+};
+
+// 4. Создаём структуру Player (Игрок)
+struct Player {
+    int id;                // уникальный идентификатор
+    string login;          // логин
+    string password;         // пароль
+
+    // 5. Метод для вывода данных игрока
+    void printInfo() const {
+        cout << "ID: " << id << endl;
+        cout << "Логин: " << login << endl;
+        cout << "Пароль: " << password << endl;
+    }
+};
+
+// 7. Дочерний класс MagicWeapon (Магическое оружие) от Weapon
+class MagicWeapon : public Weapon {
+private:
+    int magicDamage;  // 8. дополнительный магический урон
+
+public:
+    // 9. Конструктор без параметров
+    MagicWeapon() : Weapon("Магический клинок", 10, 50, ONEHANDED) {
+        magicDamage = 20;
+    }
+
+    // 9. Конструктор с параметрами
+    MagicWeapon(string n, int baseDmg, int dur, WeaponType t, int mDmg)
+        : Weapon(n, baseDmg, dur, t) {
+        magicDamage = mDmg;
+    }
+
+    // 10. GET-метод для магического урона
+    int getMagicDamage() const {
+        return magicDamage;
+    }
+};
+
+// Основная функция
+int main() {
+    // 3. Проверяем тип оружия с помощью if
+    Weapon sword("Меч", 25, 100, ONEHANDED);
+
+    cout << "Название оружия: " << sword.getName() << endl;
+    cout << "Урон: " << sword.getDamage() << endl;
+
+    // Определяем и выводим тип оружия
+    WeaponType weaponType = sword.getType();
+    if (weaponType == ONEHANDED) {
+        cout << "Тип оружия: Одноручное оружие" << endl;
+    } else if (weaponType == TWOHANDED) {
+        cout << "Тип оружия: Двуручное оружие" << endl;
+    } else if (weaponType == BOW) {
+        cout << "Тип оружия: Лук" << endl;
+    } else if (weaponType == CROSSBOW) {
+        cout << "Тип оружия: Арбалет" << endl;
+    }
+
+    // 6. Тестируем структуру Player
+    Player player;
+    player.id = 1;
+    player.login = "hero123";
+    player.password = "secret123";
+
+    cout << "\nИнформация об игроке:" << endl;
+    player.printInfo();
+
+    // 11. Тестируем класс MagicWeapon
+    cout << "\nТестирование магического оружия:" << endl;
+
+    // Создаём магическое оружие через конструктор без параметров
+    MagicWeapon magicSword1;
+    cout << "Оружие 1: " << magicSword1.getName() << endl;
+    cout << "Базовый урон: " << magicSword1.getDamage() << endl;
+    cout << "Магический урон: " << magicSword1.getMagicDamage() << endl;
+
+    // Создаём магическое оружие через конструктор с параметрами
+    MagicWeapon magicBow("Огненный лук", 15, 80, BOW, 30);
+    cout << "\nОружие 2: " << magicBow.getName() << endl;
+    cout << "Базовый урон: " << magicBow.getDamage() << endl;
+    cout << "Магический урон: " << magicBow.getMagicDamage() << endl;
+    cout << "Тип оружия: Лук" << endl;  // знаем, что это лук
+
+    return 0;
+}
