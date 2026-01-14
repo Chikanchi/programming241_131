@@ -1,0 +1,75 @@
+#include <iostream>
+using namespace std;
+
+// 1. Функция, вычисляющая сумму элементов массива по указателям
+int sumArray(int* start, int* end) {
+    int sum = 0;
+    for (int* ptr = start; ptr != end; ptr++) {
+        sum += *ptr;  // прибавляем значение по текущему адресу
+    }
+    return sum;
+}
+
+// 3. Функции для суммы и разности
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+// 4–5. Функция, возвращающая указатель на функцию
+int (*getOperation(char op))(int, int) {
+    if (op == '+') {
+        return add;  // возвращаем указатель на функцию add
+    } else if (op == '-') {
+        return subtract;  // возвращаем указатель на функцию subtract
+    } else {
+        return nullptr;  // если символ не + или -, возвращаем nullptr
+    }
+}
+
+int main() {
+    // 2. Проверка функции sumArray
+    int numbers[] = {1, 2, 3, 4, 5};
+    int size = 5;
+    
+    // Передаем указатели на начало и конец массива
+    int total = sumArray(numbers, numbers + size);
+    cout << "Сумма элементов массива: " << total << endl;
+    
+    // 6. Проверка работы с указателями на функции
+    char operation = '+';
+    
+    // Получаем указатель на нужную функцию
+    int (*funcPtr)(int, int) = getOperation(operation);
+    
+    if (funcPtr != nullptr) {
+        // Вызываем функцию через указатель
+        int result = funcPtr(10, 5);
+        cout << "Результат операции " << operation << ": " << result << endl;
+    } else {
+        cout << "Неизвестная операция!" << endl;
+    }
+    
+    // Меняем операцию на вычитание
+    operation = '-';
+    funcPtr = getOperation(operation);
+    
+    if (funcPtr != nullptr) {
+        int result = funcPtr(10, 5);
+        cout << "Результат операции " << operation << ": " << result << endl;
+    }
+    
+    // 7–8. Динамический указатель типа float
+    float* dynamicFloat = new float;  // выделяем память под float
+    *dynamicFloat = 3.14f;  // записываем значение
+    
+    cout << "Значение динамического float: " << *dynamicFloat << endl;
+    
+    delete dynamicFloat;  // освобождаем память
+    dynamicFloat = nullptr;  // обнуляем указатель 
+    
+
+}
