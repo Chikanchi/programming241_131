@@ -1,0 +1,118 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    // 1. Создаём двумерный массив 2x3
+    int arr2D[2](https://ru.stackoverflow.com/questions/215823/%D0%A1%D1%83%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D1%86%D0%BE%D0%B2-%D0%B4%D0%B2%D1%83%D0%BC%D0%B5%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B0)[3](https://tr-page.yandex.ru/translate?lang=en-ru&url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F41740502%2Ftwo-dimensional-array-calculate-sum-of-rows-and-product-of-columns) = {{1, 2, 3}, {4, 5, 6}}; // заполняем значениями
+    cout << "Двумерный массив 2x3:\n";
+    for (int i = 0; i < 2; i++) { // вложенные циклы ( один цикл for внутри другого)
+        for (int j = 0; j < 3; j++) {
+            cout << arr2D[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    // 2. Вычисляем сумму всех чисел двумерного массива
+    int totalSum = 0;
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            totalSum += arr2D[i][j]; // прибавляем каждый элемент к сумме
+        }
+    }
+    cout << "Сумма всех чисел массива: " << totalSum << endl;
+
+    // 3. Создаём одномерный массив из 3 элементов
+    int arr1D[3](https://tr-page.yandex.ru/translate?lang=en-ru&url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F41740502%2Ftwo-dimensional-array-calculate-sum-of-rows-and-product-of-columns);
+
+    // 4. Заполняем одномерный массив суммами столбцов двумерного массива
+    for (int j = 0; j < 3; j++) { // проходим по столбцам
+        arr1D[j] = 0; // обнуляем элемент
+        for (int i = 0; i < 2; i++) { // проходим по строкам
+            arr1D[j] += arr2D[i][j]; // суммируем элементы столбца
+        }
+    }
+
+    // 5. Выводим одномерный массив
+    cout << "Одномерный массив (суммы столбцов): ";
+    for (int j = 0; j < 3; j++) {
+        cout << arr1D[j] << " ";
+    }
+    cout << endl;
+
+    // 6. Создаём переменную типа float
+    float myFloat = 20.84;
+    cout << "Исходное значение float: " << myFloat << endl;
+
+    // 7. Создаём 2 ссылки на эту переменную
+    float& ref1 = myFloat; // float тип данных (число с плавающей точкой), & -пециальный символ, который говорит компилятору: «это не обычная переменная, а ссылка».
+    float& ref2 = myFloat; // ссылка 2
+
+    // 8. Изменяем значение через одну из ссылок
+    ref1 = 30.50;
+
+    // 9. Проверяем, что все переменные изменились
+    cout << "После изменения через ссылку:\n";
+    cout << "myFloat = " << myFloat << endl;
+    cout << "ref1 = " << ref1 << endl;
+    cout << "ref2 = " << ref2 << endl;
+
+    // 10. Создаём функцию для расчёта суммы чисел
+    auto sumOrZero = [](int num) -> int {
+        if (num <= 0) return 0; // если число <= 0, возвращаем 0
+        int sum = 0;
+        for (int i = 1; i <= num; i++) sum += i; // суммируем от 1 до num
+        return sum;
+    };
+
+    // 11. Модифицируем функцию с параметром по умолчанию
+    auto sumOrZeroDefault = [](int num = 1) -> int { // анонимная функция принимает один параметр num (целое число);имеет значение по умолчанию (= 1);возвращает целое число (int);вычисляет сумму чисел от 1 до num (если num > 0), иначе возвращает 0
+        if (num <= 0) return 0;
+        int sum = 0;
+        for (int i = 1; i <= num; i++) sum += i;
+        return sum;
+    };
+
+    cout << "sumOrZeroDefault(5) = " << sumOrZeroDefault(5) << endl; // пример вызова
+    cout << "sumOrZeroDefault() = " << sumOrZeroDefault() << endl; // вызов без параметра
+
+    // 12. Создаём функцию с 4 параметрами, последние 2 — по ссылке
+    void processNumbers(int a, int b, int& sumRef, int& prodRef) {
+        sumRef = a + b; // сумма первых двух параметров
+        prodRef = a * b; // произведение первых двух параметров
+    }
+
+    // 13. Вызываем функцию и проверяем изменения
+    int first = 3, second = 4, sumResult = 0, prodResult = 0;
+    processNumbers(first, second, sumResult, prodResult);
+    cout << "После вызова processNumbers:\n";
+    cout << "sumResult = " << sumResult << " (должно быть 7)\n";
+    cout << "prodResult = " << prodResult << " (должно быть 12)\n";
+
+    // 15. Создаём переменную любого типа
+    string anyVar = "Привет, мир!";
+    cout << "Любая переменная: " << anyVar << endl;
+
+    // 16. Создаём цикл и выводим переменную 3 раза
+    cout << "Цикл с выводом двумерного массива 3 раза:\n";
+    for (int k = 0; k < 3; k++) {
+        cout << "Итерация " << k + 1 << ": ";
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                cout << arr2D[i][j] << " ";
+            }
+        }
+        cout << endl;
+    }
+
+    // 17. Объявляем переменную внутри цикла
+    for (int k = 0; k < 3; k++) {
+        int innerVar = k * 10; // создаём переменную внутри цикла
+        cout << "innerVar на итерации " << k + 1 << " = " << innerVar << endl;
+    }
+
+    // 18. Пытаемся вывести innerVar за пределами цикла (вызовет ошибку)
+    // cout << "innerVar за пределами цикла = " << innerVar << endl; // КОМПИЛЯТОР ВЫДАСТ ОШИБКУ!
+    // Причина: innerVar объявлена внутри цикла и недоступна за его пределами (область видимости).
+
+    
+}
