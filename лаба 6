@@ -1,0 +1,57 @@
+#include <iostream>
+
+// тип данных - перечисление
+enum class BirthError {
+    NEGATIVE,
+    TOO_OLD,
+    NOT_BORN
+};
+
+
+// пользовательское исключение 
+class BirthException {
+public:
+    BirthError error;
+    BirthException(BirthError e) : error(e) {}
+};
+
+// основная программа
+int main() {
+    try {
+        int n;
+        std::cout << "Введите число 1, 2 или 3: ";
+        std::cin >> n;
+
+        if (n == 1) std::cout << "Один\n";
+        else if (n == 2) std::cout << "Два\n";
+        else if (n == 3) std::cout << "Три\n";
+        else throw std::invalid_argument("Некорректное значение");
+
+        int year;
+        std::cout << "Введите год своего рождения: ";
+        std::cin >> year;
+
+        int currentYear = 2026;
+
+// Вызов исключения взависимости от значения года
+        if (year < 0)
+            throw BirthException(BirthError::NEGATIVE);
+        if (year < 1850)
+            throw BirthException(BirthError::TOO_OLD);
+        if (year > currentYear)
+            throw BirthException(BirthError::NOT_BORN);
+
+        std::cout << "Спасибо!\n";
+    }
+// Обработка исключения
+    catch (const BirthException& e) {
+        if (e.error == BirthError::NEGATIVE)
+            std::cout << "Вы ввели отрицательное число!\n";
+        else if (e.error == BirthError::TOO_OLD)
+            std::cout << "Что-то не верится...\n";
+        else if (e.error == BirthError::NOT_BORN)
+            std::cout << "Вы ещё не родились\n";
+    }
+
+    return 0;
+}
