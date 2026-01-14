@@ -1,0 +1,131 @@
+#include <iostream>
+using namespace std;
+
+// 1. Класс Weapon (Оружие)
+class Weapon {
+private:
+    string name;        // название оружия (закрытое поле)
+    int damage;         // наносимый урон (закрытое поле)
+    int durability;     // прочность (закрытое поле)
+
+public:
+    // 2. GET-методы для всех полей
+    string getName() const {
+        return name;
+    }
+
+    int getDamage() const {
+        return damage;
+    }
+
+    int getDurability() const {
+        return durability;
+    }
+
+    // 3. SET-метод для наносимого урона
+    void setDamage(int newDamage) {
+        if (newDamage >= 0) {            // защита от отрицательных значений
+            damage = newDamage;
+        }
+    }
+
+    // Конструктор для инициализации оружия
+    Weapon(string n, int d, int dur) {
+        name = n;
+        damage = d;
+        durability = dur;
+    }
+};
+
+// 5. Класс Characteristic (Характеристика)
+class Characteristic {
+private:
+    int strength;   // сила (закрытое поле)
+
+public:
+    // Конструктор, инициализирующий силу
+    Characteristic(int str) {
+        strength = str;
+    }
+
+    // 7. Метод GetDamage: возвращает сумму силы и урона оружия
+    int GetDamage(const Weapon& weapon) const {
+        return strength + weapon.getDamage();
+    }
+};
+
+// 6. Делаем Characteristic дружественным для Weapon
+// Это позволяет Characteristic обращаться к private-полям Weapon
+// (хотя в нашем случае мы используем только публичные GET-методы)
+friend class Characteristic;
+
+// 9. Класс MyMath (Математические операции)
+class MyMath {
+private:
+    // 10. Статическое поле: счётчик вызовов методов
+    static int callCount;
+
+public:
+    // 11. Статические методы с инкрементом счётчика
+    static int Add(int a, int b) {
+        callCount++;  // увеличиваем счётчик
+        return a + b;
+    }
+
+    static int Sub(int a, int b) {
+        callCount++;
+        return a - b;
+    }
+
+    static int Mult(int a, int b) {
+        callCount++;
+        return a * b;
+    }
+
+    static double Div(int a, int b) {
+        callCount++;
+        if (b != 0) {
+            return static_cast<double>(a) / b;  // приводим к double для дробного результата
+        } else {
+            cout << "Ошибка: деление на ноль!" << endl;
+            return 0;
+        }
+    }
+
+    // Метод для получения значения счётчика
+    static int getCallCount() {
+        return callCount;
+    }
+};
+
+// Инициализация статического поля (обязательно вне класса)
+int MyMath::callCount = 0;
+
+// 4, 8, 12, 13. Основная функция для проверки всего функционала
+int main() {
+    // Проверяем класс Weapon
+    Weapon sword("Меч", 25, 100);  // создаём оружие
+
+    cout << "Название оружия: " << sword.getName() << endl;
+    cout << "Урон оружия: " << sword.getDamage() << endl;
+    cout << "Прочность оружия: " << sword.getDurability() << endl;
+
+    sword.setDamage(30);  // меняем урон
+    cout << "Новый урон оружия: " << sword.getDamage() << endl;
+
+    // Проверяем класс Characteristic
+    Characteristic hero(15);  // герой с силой 15
+    int totalDamage = hero.GetDamage(sword);  // суммарный урон
+    cout << "Суммарный урон (сила + урон оружия): " << totalDamage << endl;
+
+    // Проверяем класс MyMath
+    cout << "5 + 3 = " << MyMath::Add(5, 3) << endl;
+    cout << "10 - 4 = " << MyMath::Sub(10, 4) << endl;
+    cout << "6 * 7 = " << MyMath::Mult(6, 7) << endl;
+    cout << "15 / 3 = " << MyMath::Div(15, 3) << endl;
+
+    // Проверяем счётчик вызовов
+    cout << "Количество вызовов методов MyMath: " << MyMath::getCallCount() << endl;
+
+    return 0;
+}
