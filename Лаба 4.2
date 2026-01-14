@@ -1,0 +1,81 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Класс оружия
+class Weapon {
+private:
+    string name;
+    int damage;
+    double weight;
+
+public:
+    // Конструктор с параметрами
+    Weapon(string n, int d, double w) : name(n), damage(d), weight(w) {
+        cout << "Создано оружие: " << name << endl;
+    }
+
+    // Деструктор (шаг 1)
+    ~Weapon() {
+        cout << "Деструктор: оружие \"" << name 
+             << "\" (урон=" << damage
+             << ", вес=" << weight << " кг) удаляется." << endl;
+    }
+
+    // Метод для проверки, можно ли поднять оружие (шаг 5)
+    bool canLift(double maxWeight) const {
+        return maxWeight < weight;  // true, если макс. вес < веса оружия
+    }
+
+    // Метод, возвращающий суммарный вес с другим оружием (шаг 6)
+    double totalWeight(const Weapon& other) const {
+        return weight + other.weight;
+    }
+
+    // Перегрузка: суммарный вес с заданным числом (шаг 7)
+    double totalWeight(double additionalWeight) const {
+        return weight + additionalWeight;
+    }
+
+    // Обновлённый метод через перегрузку (шаг 8)
+    double totalWeightWithWeapon(const Weapon& other) const {
+        return totalWeight(other.weight);  // используем перегрузку
+    }
+
+    // Геттеры для доступа к полям (для вывода в консоль)
+    string getName() const { return name; }
+    int getDamage() const { return damage; }
+    double getWeight() const { return weight; }
+};
+
+int main() {
+    // Шаг 2: создаём обычный объект
+    Weapon sword("Клинок Тьмы", 25, 1.8);
+    cout << "\nДанные оружия (sword):" << endl;
+    cout << "Название: " << sword.getName() << endl;
+    cout << "Урон: " << sword.getDamage() << endl;
+    cout << "Вес: " << sword.getWeight() << " кг" << endl;
+
+    // Шаг 3: создаём динамический объект
+    Weapon* axe = new Weapon("Топор Войны", 30, 4.2);
+    cout << "\nДанные динамического оружия (axe):" << endl;
+    cout << "Название: " << axe->getName() << endl;
+    cout << "Урон: " << axe->getDamage() << endl;
+    cout << "Вес: " << axe->getWeight() << " кг" << endl;
+
+    // Шаг 5: проверяем, можно ли поднять оружие
+    cout << "\nМожно ли поднять sword (макс. вес 1.5 кг)? " 
+         << (sword.canLift(1.5) ? "Да" : "Нет") << endl;
+
+    // Шаг 6, 7, 8: проверяем суммарный вес
+    cout << "Суммарный вес sword и axe: "
+         << sword.totalWeightWithWeapon(*axe) << " кг" << endl;
+    cout << "Суммарный вес sword + 2 кг: "
+         << sword.totalWeight(2.0) << " кг" << endl;
+
+    // Шаг 4: удаляем динамический объект (вызов деструктора)
+    delete axe;
+
+    // Деструктор для sword вызовется автоматически при выходе из main
+    return 0;
+}
