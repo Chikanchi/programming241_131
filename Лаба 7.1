@@ -1,0 +1,18 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    string input;
+    getline(cin, input);
+
+    if (input.length() >= 4) {
+        cout << "Подстрока: " << input.substr(1, 3) << endl;
+    } else if (input.length() > 1) {
+        cout << "Подстрока: " << input.substr(1) << endl;
+    }
+
+    int index = input.find("a");
+    cout << index << endl;
+}
