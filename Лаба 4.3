@@ -1,0 +1,123 @@
+// Weapon.h
+#ifndef WEAPON_H
+#define WEAPON_H
+
+#include <string>
+
+// Класс "Оружие"
+class Weapon {
+private:
+    std::string name;   // название оружия
+    int damage;         // наносимый урон
+    double weight;       // вес в кг
+
+public:
+    // Конструктор: создаёт оружие с заданными параметрами
+    Weapon(std::string n, int d, double w);
+
+    // Деструктор: вызывается при уничтожении объекта
+    ~Weapon();
+
+    // Метод: проверяет, можно ли поднять оружие при заданном макс. весе
+    bool canLift(double maxWeight) const;
+
+    // Метод: возвращает сумму весов текущего и переданного оружия
+    double totalWeight(const Weapon& other) const;
+
+    // Перегрузка: возвращает сумму веса текущего оружия и заданного числа
+    double totalWeight(double additionalWeight) const;
+
+    // Метод: использует перегрузку totalWeight для расчёта суммы с другим оружием
+    double totalWeightWithWeapon(const Weapon& other) const;
+
+    // Геттеры: позволяют получить значения приватных полей
+    std::string getName() const;
+    int getDamage() const;
+    double getWeight() const;
+};
+
+#endif // WEAPON_H
+
+
+// Weapon.cpp
+#include "Weapon.h"
+#include <iostream>
+
+// Реализация конструктора
+Weapon::Weapon(std::string n, int d, double w)
+    : name(n), damage(d), weight(w) {
+    std::cout << "Создано оружие: " << name << std::endl;
+}
+
+// Реализация деструктора
+Weapon::~Weapon() {
+    std::cout << "Деструктор: оружие \"" << name
+              << "\" (урон=" << damage
+              << ", вес=" << weight << " кг) удаляется." << std::endl;
+}
+
+// Реализация метода canLift
+bool Weapon::canLift(double maxWeight) const {
+    return maxWeight < weight;  // true, если макс. вес < веса оружия
+}
+
+// Реализация totalWeight (с объектом Weapon)
+double Weapon::totalWeight(const Weapon& other) const {
+    return weight + other.weight;
+}
+
+// Перегрузка: totalWeight (с числом)
+double Weapon::totalWeight(double additionalWeight) const {
+    return weight + additionalWeight;
+}
+
+// Реализация totalWeightWithWeapon (использует перегрузку)
+double Weapon::totalWeightWithWeapon(const Weapon& other) const {
+    return totalWeight(other.weight);  // вызов перегрузки
+}
+
+// Реализация геттеров
+std::string Weapon::getName() const { return name; }
+int Weapon::getDamage() const { return damage; }
+double Weapon::getWeight() const { return weight; }
+
+
+
+// main.cpp
+#include <iostream>
+#include "Weapon.h"  // подключаем наш класс
+
+int main() {
+    // 1. Создаём обычный объект (на стеке)
+    Weapon sword("Клинок Тьмы", 25, 1.8);
+    
+    std::cout << "\nДанные оружия (sword):" << std::endl;
+    std::cout << "Название: " << sword.getName() << std::endl;
+    std::cout << "Урон: " << sword.getDamage() << std::endl;
+    std::cout << "Вес: " << sword.getWeight() << " кг" << std::endl;
+
+    // 2. Создаём динамический объект (в динамической памяти)
+    Weapon* axe = new Weapon("Топор Войны", 30, 4.2);
+    
+    std::cout << "\nДанные динамического оружия (axe):" << std::endl;
+    std::cout << "Название: " << axe->getName() << std::endl;
+    std::cout << "Урон: " << axe->getDamage() << std::endl;
+    std::cout << "Вес: " << axe->getWeight() << " кг" << std::endl;
+
+    // 3. Проверяем метод canLift
+    std::cout << "\nМожно ли поднять sword (макс. вес 1.5 кг)? "
+              << (sword.canLift(1.5) ? "Да" : "Нет") << std::endl;
+
+    // 4. Проверяем методы расчёта суммарного веса
+    std::cout << "Суммарный вес sword и axe: "
+              << sword.totalWeightWithWeapon(*axe) << " кг" << std::endl;
+    std::cout << "Суммарный вес sword + 2 кг: "
+              << sword.totalWeight(2.0) << " кг" << std::endl;
+
+    // 5. Удаляем динамический объект (вызов деструктора)
+    delete axe;
+
+    // 6. Деструктор для sword вызовется автоматически при выходе из main
+    return 0;
+}
+
