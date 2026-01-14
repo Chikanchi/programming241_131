@@ -1,0 +1,47 @@
+
+#ifndef MYFUNC_H
+#define MYFUNC_H
+
+// Пространство имён для функции
+namespace MyNamespace {
+    void func(int num);  // Объявление функции
+}
+
+#endif  // MYFUNC_H
+
+// === РЕАЛИЗАЦИЯ ФУНКЦИИ (условно myfunc.cpp) ===
+#include <iostream>
+using namespace std;
+
+// Реализация функции внутри пространства имён
+namespace MyNamespace {
+    void func(int num) {
+        static int staticVar = 0;  // Статическая переменная
+
+        // 1. Выводим сумму параметра и статической переменной
+        cout << num + staticVar << endl;
+
+        // 2. Присваиваем статической переменной значение параметра
+        staticVar = num;
+    }
+}
+
+
+#include "myfunc.h"  // Подключаем наш заголовочный файл
+#include <iostream>
+using namespace std;
+
+// Макрос для вычисления суммы двух чисел
+#define SUM(a, b) ((a) + (b))
+
+int main() {
+    // Вызываем функцию несколько раз с разными аргументами
+    MyNamespace::func(5);   // Шаг 1: staticVar=0 → 0+5=5; staticVar становится 5
+    MyNamespace::func(10);  // Шаг 2: staticVar=5 → 5+10=15; staticVar становится 10
+    MyNamespace::func(3);   // Шаг 3: staticVar=10 → 10+3=13; staticVar становится 3
+
+    // Используем макрос
+    cout << "Сумма 3 и 4: " << SUM(3, 4) << endl;
+
+    return 0;
+}
