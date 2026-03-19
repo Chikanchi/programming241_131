@@ -1,6 +1,4 @@
-#ifndef VEHICLE_H
-#define VEHICLE_H
-
+#pragma once
 #include <string>
 
 using namespace std;
