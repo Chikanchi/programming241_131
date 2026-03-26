@@ -1,5 +1,4 @@
-#ifndef FREIGHTVEHICLE_H
-#define FREIGHTVEHICLE_H
+#pragma once
 
 #include "Vehicle.h"
 #include <string>
