@@ -1,5 +1,4 @@
-#ifndef TRANSPORTUNIT_H
-#define TRANSPORTUNIT_H
+#pragma once
 
 class TransportUnit {
 
