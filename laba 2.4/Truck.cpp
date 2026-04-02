@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include "Truck.h"
 
 double Truck::calculateToll(double distance) const {
