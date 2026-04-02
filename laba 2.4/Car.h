@@ -8,4 +8,4 @@ public:
     double calculateToll(double distance) const override;
 };
 
-#endif
+
