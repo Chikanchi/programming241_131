@@ -6,4 +6,4 @@ public:
     virtual double calculateToll(double distance) const = 0;
 };
 
-#endif
+
