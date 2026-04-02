@@ -1,5 +1,4 @@
-#ifndef TRUCK_H
-#define TRUCK_H
+#pragma once
 
 #include "TransportUnit.h"
 
