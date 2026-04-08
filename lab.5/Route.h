@@ -1,5 +1,4 @@
-#ifndef ROUTE_H
-#define ROUTE_H
+#pragma once
 
 #include <string>
 
@@ -17,4 +16,4 @@ public:
     int getLength() const;
 };
 
-#endif
+
