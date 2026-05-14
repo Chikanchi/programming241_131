@@ -1,5 +1,4 @@
-#ifndef TRUCK_H
-#define TRUCK_H
+#pragma once
 
 #include "TransportUnit.h"
 
@@ -9,4 +8,4 @@ public:
     double calculateToll(double distance) const override;
 };
 
-#endif
+
