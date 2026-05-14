@@ -1,5 +1,4 @@
-#ifndef ASSIGNEDROUTE_H
-#define ASSIGNEDROUTE_H
+#pragma once
 
 #include "TransportUnit.h"
 #include "Route.h"
@@ -17,4 +16,3 @@ public:
     double calculateTotalCost();
 };
 
-#endif
